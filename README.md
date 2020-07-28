@@ -1,2 +1,2 @@
 # Hilbert-Curve
-I make Hilbert Curve using p5.js
+I made Hilbert Curve using p5.js
