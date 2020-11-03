@@ -2,7 +2,7 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 	angleMode(DEGREES);
 	let unit = [ [1,3], [1,1], [3,1],[3,3]];
-	background(51);
+	background(51,122,92);
 	// console.log(rotatess([[-1,-1],[1,-1],[1,1],[-1,1]], 90));
 	// drawCurve(extention(extention(unit)));	
 	curve = makeCurve(unit);
