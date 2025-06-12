@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hilbert Curve</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #555;
+      background: #000;
+    }
+    label {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hilbert Curve</h1>
+  <canvas id="hilbertCanvas" width="512" height="512"></canvas>
+  <label>
+    Order:
+    <input type="range" id="orderSlider" min="1" max="8" value="4">
+    <span id="orderValue">4</span>
+  </label>
+
+  <script>
+    const canvas = document.getElementById('hilbertCanvas');
+    const ctx = canvas.getContext('2d');
+    const slider = document.getElementById('orderSlider');
+    const orderValue = document.getElementById('orderValue');
+
+    function hilbert(n, angle, step, x, y, dir) {
+      if (n <= 0) return;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate((dir + angle) * Math.PI / 180);
+      hilbert(n - 1, -angle, step, 0, 0, 0);
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(step, 0);
+      ctx.stroke();
+      ctx.translate(step, 0);
+
+      ctx.rotate(angle * Math.PI / 180);
+      hilbert(n - 1, angle, step, 0, 0, 0);
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, step);
+      ctx.stroke();
+      ctx.translate(0, step);
+
+      ctx.rotate(angle * Math.PI / 180);
+      hilbert(n - 1, angle, step, 0, 0, 0);
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-step, 0);
+      ctx.stroke();
+      ctx.translate(-step, 0);
+
+      hilbert(n - 1, -angle, step, 0, 0, 0);
+      ctx.restore();
+    }
+
+    function drawHilbert(order) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const size = canvas.width;
+      const steps = Math.pow(2, order) - 1;
+      const step = size / (steps + 1);
+      ctx.strokeStyle = "#0f0";
+      ctx.lineWidth = 1;
+      hilbert(order, 90, step, step / 2, step / 2, 0);
+    }
+
+    slider.addEventListener('input', () => {
+      const order = parseInt(slider.value, 10);
+      orderValue.textContent = order;
+      drawHilbert(order);
+    });
+
+    drawHilbert(parseInt(slider.value, 10));
+  </script>
+</body>
+</html>
